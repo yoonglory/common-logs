@@ -1,4 +1,4 @@
-replicaCount: 2
+replicaCount: 1
 
 image:
   repository: 765889777992.dkr.ecr.ap-northeast-1.amazonaws.com/pyapp
