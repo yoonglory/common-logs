@@ -51,5 +51,8 @@ jobs:
         git config user.email "${{ secrets.GIT_USER_EMAIL }}"
         git add my-python-app/values.yaml
         git commit -m "Update Helm image tag to $VERSION" || echo "No changes"
+	echo "user ${secrets.GIT_USER_NAME}"
+	echo "${GH_PAT:0:10}****"
+
         git push https://x-access-token:${GH_PAT}@github.com/${{ github.repository }}.git HEAD:main
 
