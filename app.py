@@ -11,7 +11,7 @@ REQUEST_LATENCY = Histogram("http_request_duration_seconds", "Request latency", 
 @REQUEST_LATENCY.labels("/").time()
 def hello():
     REQUEST_COUNT.labels(method=request.method, endpoint="/").inc()
-    return "Hello from monitored Flask!"
+    return "Hello from monitored Flask!2"
 
 @app.route("/metrics")
 def metrics():

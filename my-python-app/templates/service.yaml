@@ -4,6 +4,9 @@ metadata:
   name: pyapp
   annotations:
     service.beta.kubernetes.io/aws-load-balancer-scheme: internet-facing
+    prometheus.io/scrape: "true"
+    prometheus.io/port: "80"
+    prometheus.io/path: "/metrics"
 spec:
   selector:
     app: pyapp
