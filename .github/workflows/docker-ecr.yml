@@ -15,6 +15,10 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v4
 
+    - name: Set version
+      id: vars
+      run: echo "VERSION=v1.0.${{ github.run_number }}" >> $GITHUB_ENV
+
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v3
 
@@ -32,6 +36,18 @@ jobs:
     - name: Build and push Docker image to ECR
       run: |
         IMAGE=${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/${{ secrets.ECR_REPO }}
-        docker build -t $IMAGE:latest .
-        docker push $IMAGE:latest
+        docker build -t $IMAGE:$VERSION .
+        docker push $IMAGE:$VERSION
+
+    - name: Update image tag in Helm values.yaml
+      run: |
+        sed -i "s|tag: .*|tag: \"$VERSION\"|" my-python-app/values.yaml
+
+    - name: Commit and push updated values.yaml
+      run: |
+        git config user.name "${{ secrets.GIT_USER_NAME }}"
+        git config user.email "${{ secrets.GIT_USER_EMAIL }}"
+        git add my-python-app/values.yaml
+        git commit -m "Update Helm image tag to $VERSION"
+        git push
 
